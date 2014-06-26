@@ -10,33 +10,18 @@
 #include <stdio.h>
 
 #include <string.h>
-typedef struct bigint84008 bigint84008;
-typedef struct bigintdigits84006 bigintdigits84006;
+typedef struct bigint85005 bigint85005;
+typedef struct bigintdigits85003 bigintdigits85003;
 typedef struct TGenericSeq TGenericSeq;
 typedef struct TNimType TNimType;
 typedef struct TNimNode TNimNode;
 typedef struct NimStringDesc NimStringDesc;
-typedef struct tcell41088 tcell41088;
-typedef struct tcellseq41104 tcellseq41104;
-typedef struct tgcheap43016 tgcheap43016;
-typedef struct tcellset41100 tcellset41100;
-typedef struct tpagedesc41096 tpagedesc41096;
-typedef struct tmemregion23410 tmemregion23410;
-typedef struct tsmallchunk22638 tsmallchunk22638;
-typedef struct tllchunk23404 tllchunk23404;
-typedef struct tbigchunk22640 tbigchunk22640;
-typedef struct tintset22615 tintset22615;
-typedef struct ttrunk22611 ttrunk22611;
-typedef struct tavlnode23408 tavlnode23408;
-typedef struct tgcstat43014 tgcstat43014;
-typedef struct tbasechunk22636 tbasechunk22636;
-typedef struct tfreecell22628 tfreecell22628;
 struct  TGenericSeq  {
 NI len;
 NI reserved;
 };
-struct  bigint84008  {
-bigintdigits84006* Digits;
+struct  bigint85005  {
+bigintdigits85003* Digits;
 NIM_BOOL Neg;
 };
 typedef N_NIMCALL_PTR(void, TY2289) (void* p, NI op);
@@ -61,210 +46,33 @@ struct  NimStringDesc  {
   TGenericSeq Sup;
 NIM_CHAR data[SEQ_DECL_SIZE];
 };
-struct  tcell41088  {
-NI Refcount;
-TNimType* Typ;
-};
-struct  tcellseq41104  {
-NI Len;
-NI Cap;
-tcell41088** D;
-};
-struct  tcellset41100  {
-NI Counter;
-NI Max;
-tpagedesc41096* Head;
-tpagedesc41096** Data;
-};
-typedef tsmallchunk22638* TY23422[512];
-typedef ttrunk22611* ttrunkbuckets22613[256];
-struct  tintset22615  {
-ttrunkbuckets22613 Data;
-};
-struct  tmemregion23410  {
-NI Minlargeobj;
-NI Maxlargeobj;
-TY23422 Freesmallchunks;
-tllchunk23404* Llmem;
-NI Currmem;
-NI Maxmem;
-NI Freemem;
-NI Lastsize;
-tbigchunk22640* Freechunkslist;
-tintset22615 Chunkstarts;
-tavlnode23408* Root;
-tavlnode23408* Deleted;
-tavlnode23408* Last;
-tavlnode23408* Freeavlnodes;
-};
-struct  tgcstat43014  {
-NI Stackscans;
-NI Cyclecollections;
-NI Maxthreshold;
-NI Maxstacksize;
-NI Maxstackcells;
-NI Cycletablesize;
-NI64 Maxpause;
-};
-struct  tgcheap43016  {
-void* Stackbottom;
-NI Cyclethreshold;
-tcellseq41104 Zct;
-tcellseq41104 Decstack;
-tcellset41100 Cycleroots;
-tcellseq41104 Tempstack;
-NI Recgclock;
-tmemregion23410 Region;
-tgcstat43014 Stat;
-};
-typedef NI TY22618[8];
-struct  tpagedesc41096  {
-tpagedesc41096* Next;
-NI Key;
-TY22618 Bits;
-};
-struct  tbasechunk22636  {
-NI Prevsize;
-NI Size;
-NIM_BOOL Used;
-};
-struct  tsmallchunk22638  {
-  tbasechunk22636 Sup;
-tsmallchunk22638* Next;
-tsmallchunk22638* Prev;
-tfreecell22628* Freelist;
-NI Free;
-NI Acc;
-NF Data;
-};
-struct  tllchunk23404  {
-NI Size;
-NI Acc;
-tllchunk23404* Next;
-};
-struct  tbigchunk22640  {
-  tbasechunk22636 Sup;
-tbigchunk22640* Next;
-tbigchunk22640* Prev;
-NI Align;
-NF Data;
-};
-struct  ttrunk22611  {
-ttrunk22611* Next;
-NI Key;
-TY22618 Bits;
-};
-typedef tavlnode23408* TY23414[2];
-struct  tavlnode23408  {
-TY23414 Link;
-NI Key;
-NI Upperbound;
-NI Level;
-};
-struct  tfreecell22628  {
-tfreecell22628* Next;
-NI Zerofield;
-};
-struct bigintdigits84006 {
+struct bigintdigits85003 {
   TGenericSeq Sup;
   NU32 data[SEQ_DECL_SIZE];
 };
-N_NIMCALL(void, initbigint_84018)(NU32 val, bigint84008* Result);
+N_NIMCALL(void, initbigint_85015)(NU32 val, bigint85005* Result);
 N_NOINLINE(void, chckNil)(void* p);
 N_NIMCALL(void, genericReset)(void* dest, TNimType* mt);
-N_NIMCALL(void, HEX2B_84107)(bigint84008 a, bigint84008 b, bigint84008* Result);
-N_NIMCALL(NimStringDesc*, HEX24_85013)(bigint84008 x_85017);
-N_NIMCALL(NimStringDesc*, HEX24_85028)(bigintdigits84006* x_85034);
-N_NIMCALL(NimStringDesc*, collectiontostring_85038)(bigintdigits84006* x_85042, NimStringDesc* b_85044, NimStringDesc* e_85046);
-N_NIMCALL(void, HEX2D_84258)(bigint84008 a, bigint84008 b, bigint84008* Result);
-N_NIMCALL(void, invert_84043)(bigint84008 a, bigint84008* Result);
-static N_INLINE(void, asgnRefNoCycle)(void** dest, void* src);
-static N_INLINE(tcell41088*, usrtocell_44443)(void* usr);
-static N_INLINE(void, nimFrame)(TFrame* s);
-static N_INLINE(void, popFrame)(void);
-static N_INLINE(void, rtladdzct_46002)(tcell41088* c);
-N_NOINLINE(void, addzct_44418)(tcellseq41104* s, tcell41088* c);
+N_NIMCALL(NimStringDesc*, HEX24_86010)(bigint85005 x_86014);
+N_NIMCALL(NimStringDesc*, HEX24_86025)(bigintdigits85003* x_86031);
+N_NIMCALL(NimStringDesc*, collectiontostring_86035)(bigintdigits85003* x_86039, NimStringDesc* b_86041, NimStringDesc* e_86043);
+N_NIMCALL(void, HEX2F_85487)(bigint85005 a, bigint85005 b, bigint85005* Result);
 static N_INLINE(void, initStackBottom)(void);
 N_NOINLINE(void, setStackBottom)(void* thestackbottom);
+static N_INLINE(void, nimFrame)(TFrame* s);
+static N_INLINE(void, popFrame)(void);
 N_NOINLINE(void, systemInit)(void);
 N_NOINLINE(void, systemDatInit)(void);
+N_NOINLINE(void, unsignedInit)(void);
+N_NOINLINE(void, unsignedDatInit)(void);
 N_NOINLINE(void, bigintInit)(void);
 N_NOINLINE(void, bigintDatInit)(void);
 N_NOINLINE(void, testInit)(void);
 N_NOINLINE(void, testDatInit)(void);
-bigint84008 a_85002;
-extern TNimType NTI84008; /* BigInt */
-bigint84008 b_85006;
-bigint84008 c_85009;
+bigint85005 a_86002;
+extern TNimType NTI85005; /* BigInt */
+bigint85005 b_86006;
 extern TFrame* frameptr_13038;
-extern tgcheap43016 gch_43044;
-
-static N_INLINE(void, nimFrame)(TFrame* s) {
-	(*s).prev = frameptr_13038;
-	frameptr_13038 = s;
-}
-
-static N_INLINE(void, popFrame)(void) {
-	frameptr_13038 = (*frameptr_13038).prev;
-}
-
-static N_INLINE(tcell41088*, usrtocell_44443)(void* usr) {
-	tcell41088* result;
-	nimfr("usrToCell", "gc.nim")
-	result = 0;
-	nimln(118, "gc.nim");
-	nimln(118, "gc.nim");
-	nimln(118, "gc.nim");
-	result = ((tcell41088*) ((NI)((NU64)(((NI) (usr))) - (NU64)(((NI)sizeof(tcell41088))))));
-	popFrame();
-	return result;
-}
-
-static N_INLINE(void, rtladdzct_46002)(tcell41088* c) {
-	nimfr("rtlAddZCT", "gc.nim")
-	nimln(199, "gc.nim");
-	addzct_44418(&gch_43044.Zct, c);
-	popFrame();
-}
-
-static N_INLINE(void, asgnRefNoCycle)(void** dest, void* src) {
-	nimfr("asgnRefNoCycle", "gc.nim")
-	nimln(251, "gc.nim");
-	{
-		tcell41088* c;
-		nimln(251, "gc.nim");
-		nimln(251, "gc.nim");
-		if (!!((src == NIM_NIL))) goto LA3;
-		nimln(252, "gc.nim");
-		c = usrtocell_44443(src);
-		nimln(169, "gc.nim");
-		(*c).Refcount += 8;
-	}
-	LA3: ;
-	nimln(254, "gc.nim");
-	{
-		tcell41088* c;
-		nimln(254, "gc.nim");
-		nimln(254, "gc.nim");
-		if (!!(((*dest) == NIM_NIL))) goto LA7;
-		nimln(255, "gc.nim");
-		c = usrtocell_44443((*dest));
-		nimln(256, "gc.nim");
-		{
-			nimln(167, "gc.nim");
-			(*c).Refcount -= 8;
-			nimln(168, "gc.nim");
-			if (!((NU64)((*c).Refcount) < (NU64)(8))) goto LA11;
-			nimln(257, "gc.nim");
-			rtladdzct_46002(c);
-		}
-		LA11: ;
-	}
-	LA7: ;
-	nimln(258, "gc.nim");
-	(*dest) = src;
-	popFrame();
-}
 
 static N_INLINE(void, initStackBottom)(void) {
 	void* volatile locals;
@@ -275,9 +83,11 @@ static N_INLINE(void, initStackBottom)(void) {
 void PreMain() {
 	systemDatInit();
 	systemInit();
+	unsignedDatInit();
 	bigintDatInit();
 	testDatInit();
 	initStackBottom();
+	unsignedInit();
 	bigintInit();
 }
 
@@ -297,64 +107,35 @@ int main(int argc, char** args, char** env) {
 	return nim_program_result;
 }
 
+
+static N_INLINE(void, nimFrame)(TFrame* s) {
+	(*s).prev = frameptr_13038;
+	frameptr_13038 = s;
+}
+
+static N_INLINE(void, popFrame)(void) {
+	frameptr_13038 = (*frameptr_13038).prev;
+}
 N_NOINLINE(void, testInit)(void) {
-	NimStringDesc* LOC1;
+	bigint85005 LOC1;
 	NimStringDesc* LOC2;
-	bigint84008 LOC3;
-	NimStringDesc* LOC4;
-	bigint84008 LOC5;
-	bigint84008 LOC6;
-	NimStringDesc* LOC7;
 	nimfr("test", "test.nim")
 	nimln(3, "test.nim");
-	chckNil((void*)&a_85002);
-	genericReset((void*)&a_85002, (&NTI84008));
-	initbigint_84018(((NU32) 10), &a_85002);
+	chckNil((void*)&a_86002);
+	genericReset((void*)&a_86002, (&NTI85005));
+	initbigint_85015(((NU32) 10), &a_86002);
 	nimln(4, "test.nim");
-	chckNil((void*)&b_85006);
-	genericReset((void*)&b_85006, (&NTI84008));
-	initbigint_84018(((NU32) 20), &b_85006);
+	chckNil((void*)&b_86006);
+	genericReset((void*)&b_86006, (&NTI85005));
+	initbigint_85015(((NU32) 2000000), &b_86006);
 	nimln(6, "test.nim");
-	chckNil((void*)&c_85009);
-	genericReset((void*)&c_85009, (&NTI84008));
-	HEX2B_84107(a_85002, b_85006, &c_85009);
-	nimln(7, "test.nim");
-	nimln(7, "test.nim");
-	LOC1 = 0;
-	LOC1 = HEX24_85013(c_85009);
-	printf("%s\015\012", (LOC1)->data);
-	nimln(9, "test.nim");
-	chckNil((void*)&c_85009);
-	genericReset((void*)&c_85009, (&NTI84008));
-	HEX2D_84258(a_85002, b_85006, &c_85009);
-	nimln(10, "test.nim");
-	nimln(10, "test.nim");
+	nimln(6, "test.nim");
+	nimln(6, "test.nim");
+	memset((void*)&LOC1, 0, sizeof(LOC1));
+	HEX2F_85487(b_86006, a_86002, &LOC1);
 	LOC2 = 0;
-	LOC2 = HEX24_85013(c_85009);
+	LOC2 = HEX24_86010(LOC1);
 	printf("%s\015\012", (LOC2)->data);
-	nimln(11, "test.nim");
-	memset((void*)&LOC3, 0, sizeof(LOC3));
-	invert_84043(c_85009, &LOC3);
-	asgnRefNoCycle((void**) &c_85009.Digits, LOC3.Digits);
-	c_85009.Neg = LOC3.Neg;
-	nimln(12, "test.nim");
-	nimln(12, "test.nim");
-	LOC4 = 0;
-	LOC4 = HEX24_85013(c_85009);
-	printf("%s\015\012", (LOC4)->data);
-	nimln(14, "test.nim");
-	nimln(14, "test.nim");
-	memset((void*)&LOC5, 0, sizeof(LOC5));
-	initbigint_84018(((NU32) 40), &LOC5);
-	memset((void*)&LOC6, 0, sizeof(LOC6));
-	HEX2B_84107(c_85009, LOC5, &LOC6);
-	asgnRefNoCycle((void**) &c_85009.Digits, LOC6.Digits);
-	c_85009.Neg = LOC6.Neg;
-	nimln(16, "test.nim");
-	nimln(16, "test.nim");
-	LOC7 = 0;
-	LOC7 = HEX24_85013(c_85009);
-	printf("%s\015\012", (LOC7)->data);
 	popFrame();
 }
 
