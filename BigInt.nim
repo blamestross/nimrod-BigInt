@@ -58,8 +58,21 @@ proc `+` *(A:BigInt,B:BigInt) : BigInt=
         carry = 0
     digits.add(cast[uint32](tmp))
     i = i + 1
-  if carry > 0:
+  if not A.neg and not B.neg:
+    result.neg = false
+    if carry > 0:
+      digits.add(cast[uint32](carry))
+  elif A.neg and B.neg:
     result.neg = true
+    if carry > 0:
+      digits.add(cast[uint32](maxInt - carry))
+  else: #one of them is negative
+    if carry > 0:
+      #flip to positive, drop carry
+      result.neg = false
+    else: #still negative
+      result.neg = true
+
   result.digits = digits
 
 proc `-` *(A:BigInt,B:BigInt) : BigInt=
@@ -71,5 +84,6 @@ var A :BigInt = initBigInt(2)
 var B :BigInt = initBigInt(10)
 
 
-let C: BigInt = B-A
-echo(C.digits)
+let C: BigInt = A-B
+echo(C.neg, C.digits)
+echo(invert(C).digits)

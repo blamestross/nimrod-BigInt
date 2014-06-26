@@ -686,7 +686,7 @@ N_NIMCALL(void, insert_82001)(NimStringDesc** x, NimStringDesc* item, NI i);
 N_NIMCALL(void, safeadd_82411)(NimStringDesc** x, NIM_CHAR y);
 N_NIMCALL(void, safeadd_82417)(NimStringDesc** x, NimStringDesc* y);
 N_NIMCALL(TNimObject, locals_82602)(void);
-N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, NimStringDesc* b_84254, NimStringDesc* e_84256);
+N_NIMCALL(NimStringDesc*, collectiontostring_84288)(bigintdigits84004* x_84292, NimStringDesc* b_84294, NimStringDesc* e_84296);
 STRING_LITERAL(TMP2, "out of memory", 13);
 STRING_LITERAL(TMP4, "rb", 2);
 STRING_LITERAL(TMP5, "wb", 2);
@@ -770,10 +770,10 @@ STRING_LITERAL(TMP96, " --> ", 5);
 STRING_LITERAL(TMP97, "\"", 1);
 STRING_LITERAL(TMP98, "\\10\"\015\012\"", 7);
 STRING_LITERAL(TMP99, "(invalid data!)", 15);
-STRING_LITERAL(TMP138, "(len|len|len|len|len|len)(a) (==|==|==|==|==|==|==|==|==|==|==|"
+STRING_LITERAL(TMP139, "(len|len|len|len|len|len)(a) (==|==|==|==|==|==|==|==|==|==|==|"
 "==|==|==|==|==|==|==|==|==)\015\012    L seq modified while iterating "
 "over it", 134);
-STRING_LITERAL(TMP139, "@[", 2);
+STRING_LITERAL(TMP140, "@[", 2);
 NI nim_program_result;
 TY6815 globalraisehook_6819;
 TY6820 localraisehook_6824;
@@ -11395,7 +11395,7 @@ N_NIMCALL(TNimObject, locals_82602)(void) {
 	return result;
 }
 
-N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, NimStringDesc* b_84254, NimStringDesc* e_84256) {
+N_NIMCALL(NimStringDesc*, collectiontostring_84288)(bigintdigits84004* x_84292, NimStringDesc* b_84294, NimStringDesc* e_84296) {
 	NimStringDesc* result;
 	NIM_BOOL firstelement;
 	NU32 value_84414;
@@ -11404,7 +11404,7 @@ N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, 
 	nimfr("collectionToString", "system.nim")
 	result = 0;
 	nimln(1809, "system.nim");
-	result = copyString(b_84254);
+	result = copyString(b_84294);
 	nimln(1810, "system.nim");
 	firstelement = NIM_TRUE;
 	value_84414 = 0;
@@ -11412,15 +11412,15 @@ N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, 
 	i_84416 = 0;
 	nimln(2796, "system.nim");
 	nimln(2796, "system.nim");
-	l_84418 = x_84252->Sup.len;
+	l_84418 = x_84292->Sup.len;
 	nimln(2797, "system.nim");
 	while (1) {
 		NimStringDesc* LOC6;
 		nimln(2797, "system.nim");
 		if (!(i_84416 < l_84418)) goto LA1;
 		nimln(2798, "system.nim");
-		if ((NU)(i_84416) >= (NU)(x_84252->Sup.len)) raiseIndexError();
-		value_84414 = x_84252->data[i_84416];
+		if ((NU)(i_84416) >= (NU)(x_84292->Sup.len)) raiseIndexError();
+		value_84414 = x_84292->data[i_84416];
 		nimln(1812, "system.nim");
 		{
 			nimln(1812, "system.nim");
@@ -11445,26 +11445,26 @@ appendString(result, LOC6);
 			nimln(2800, "system.nim");
 			nimln(2800, "system.nim");
 			nimln(2800, "system.nim");
-			if (!!((x_84252->Sup.len == l_84418))) goto LA9;
+			if (!!((x_84292->Sup.len == l_84418))) goto LA9;
 			nimln(2800, "system.nim");
-			failedassertimpl_81021(((NimStringDesc*) &TMP138));
+			failedassertimpl_81021(((NimStringDesc*) &TMP139));
 		}
 		LA9: ;
 	} LA1: ;
 	nimln(1815, "system.nim");
-	result = resizeString(result, e_84256->Sup.len + 0);
-appendString(result, e_84256);
+	result = resizeString(result, e_84296->Sup.len + 0);
+appendString(result, e_84296);
 	popFrame();
 	return result;
 }
 
-N_NIMCALL(NimStringDesc*, HEX24_84238)(bigintdigits84004* x_84244) {
+N_NIMCALL(NimStringDesc*, HEX24_84278)(bigintdigits84004* x_84284) {
 	NimStringDesc* result;
 	nimfr("$", "system.nim")
 	result = 0;
 	nimln(1826, "system.nim");
 	nimln(1831, "system.nim");
-	result = collectiontostring_84248(x_84244, ((NimStringDesc*) &TMP139), ((NimStringDesc*) &TMP91));
+	result = collectiontostring_84288(x_84284, ((NimStringDesc*) &TMP140), ((NimStringDesc*) &TMP91));
 	popFrame();
 	return result;
 }
