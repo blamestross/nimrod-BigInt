@@ -53,10 +53,8 @@ struct bigintdigits85003 {
 N_NIMCALL(void, initbigint_85015)(NU32 val, bigint85005* Result);
 N_NOINLINE(void, chckNil)(void* p);
 N_NIMCALL(void, genericReset)(void* dest, TNimType* mt);
-N_NIMCALL(NimStringDesc*, HEX24_86010)(bigint85005 x_86014);
-N_NIMCALL(NimStringDesc*, HEX24_86025)(bigintdigits85003* x_86031);
-N_NIMCALL(NimStringDesc*, collectiontostring_86035)(bigintdigits85003* x_86039, NimStringDesc* b_86041, NimStringDesc* e_86043);
-N_NIMCALL(void, HEX2F_85487)(bigint85005 a, bigint85005 b, bigint85005* Result);
+N_NIMCALL(NimStringDesc*, HEX24_85508)(bigint85005 a);
+N_NIMCALL(void, mod_85497)(bigint85005 a, bigint85005 b, bigint85005* Result);
 static N_INLINE(void, initStackBottom)(void);
 N_NOINLINE(void, setStackBottom)(void* thestackbottom);
 static N_INLINE(void, nimFrame)(TFrame* s);
@@ -69,9 +67,9 @@ N_NOINLINE(void, bigintInit)(void);
 N_NOINLINE(void, bigintDatInit)(void);
 N_NOINLINE(void, testInit)(void);
 N_NOINLINE(void, testDatInit)(void);
-bigint85005 a_86002;
+bigint85005 a_86003;
 extern TNimType NTI85005; /* BigInt */
-bigint85005 b_86006;
+bigint85005 b_86007;
 extern TFrame* frameptr_13038;
 
 static N_INLINE(void, initStackBottom)(void) {
@@ -121,20 +119,20 @@ N_NOINLINE(void, testInit)(void) {
 	NimStringDesc* LOC2;
 	nimfr("test", "test.nim")
 	nimln(3, "test.nim");
-	chckNil((void*)&a_86002);
-	genericReset((void*)&a_86002, (&NTI85005));
-	initbigint_85015(((NU32) 10), &a_86002);
+	chckNil((void*)&a_86003);
+	genericReset((void*)&a_86003, (&NTI85005));
+	initbigint_85015(((NU32) 100), &a_86003);
 	nimln(4, "test.nim");
-	chckNil((void*)&b_86006);
-	genericReset((void*)&b_86006, (&NTI85005));
-	initbigint_85015(((NU32) 2000000), &b_86006);
+	chckNil((void*)&b_86007);
+	genericReset((void*)&b_86007, (&NTI85005));
+	initbigint_85015(((NU32) 123), &b_86007);
 	nimln(6, "test.nim");
 	nimln(6, "test.nim");
 	nimln(6, "test.nim");
 	memset((void*)&LOC1, 0, sizeof(LOC1));
-	HEX2F_85487(b_86006, a_86002, &LOC1);
+	mod_85497(b_86007, a_86003, &LOC1);
 	LOC2 = 0;
-	LOC2 = HEX24_86010(LOC1);
+	LOC2 = HEX24_85508(LOC1);
 	printf("%s\015\012", (LOC2)->data);
 	popFrame();
 }

@@ -11,7 +11,7 @@ var maxInt: int64 = int64(high(uint32))
 
 
 proc initBigInt *(val: uint32): BigInt =
-  result.digits = cast[BigIntDigits](@[val])
+  result.digits = BigIntDigits(@[val])
   result.neg = false
 
 
@@ -116,10 +116,34 @@ proc `>`*(A:BigInt,B:BigInt) : bool =
 proc `/`*(A:BigInt,B:BigInt) : BigInt = 
   result = initBigInt(0)
   var tmp : BigInt = A
-  while tmp > initBigInt(0):
+  while tmp > B:
     tmp = tmp - B
     result = result + initBigInt(1)
 
-
+proc `mod`*(A:BigInt,B:BigInt) : BigInt = 
+  var tmp : BigInt = A
+  while tmp > B:
+    tmp = tmp - B
+  result = tmp
 
 #Big-integers are ordinal
+
+proc `$`*(A:BigInt) : string =
+  result = ""
+  const HexChars = "0123456789ABCDEF"
+  var hexBase : BigInt = initBigInt(16)
+  var zero : BigInt = initBigInt(0)
+  var tmp: BigInt
+  if A.neg:
+    tmp = invert(A)
+  else:
+    tmp = A
+  while tmp > zero:
+    let digit : BigInt = tmp mod hexBase
+    tmp = tmp / hexBase
+    let intDigit: int = int(digit.digits[0])
+    result = HexChars[intDigit] & result
+  if A.neg:
+    result = "0x-"&result
+  else:
+    result = "0x"&result

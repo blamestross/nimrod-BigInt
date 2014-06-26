@@ -52,7 +52,7 @@ struct bigintdigits85003 {
 N_NIMCALL(void, initbigint_85015)(NU32 val, bigint85005* Result);
 N_NIMCALL(void, TMP129)(void* p, NI op);
 N_NIMCALL(void*, newSeq)(TNimType* typ, NI len);
-N_NIMCALL(void, genericSeqAssign)(void* dest, void* src_76004, TNimType* mt);
+N_NIMCALL(void, unsureAsgnRef)(void** dest, void* src);
 static N_INLINE(void, nimFrame)(TFrame* s);
 static N_INLINE(void, popFrame)(void);
 N_NIMCALL(void, invert_85040)(bigint85005 a, bigint85005* Result);
@@ -62,12 +62,12 @@ static N_INLINE(NI, subInt)(NI a, NI b);
 N_NOINLINE(void, raiseOverflow)(void);
 N_NOINLINE(void, raiseIndexError)(void);
 N_NIMCALL(TGenericSeq*, incrSeq)(TGenericSeq* seq, NI elemsize);
+N_NIMCALL(void, genericSeqAssign)(void* dest, void* src_76004, TNimType* mt);
 N_NIMCALL(void, HEX2B_85105)(bigint85005 a, bigint85005 b, bigint85005* Result);
 static N_INLINE(NI64, addInt64)(NI64 a, NI64 b);
 static N_INLINE(NI64, subInt64)(NI64 a, NI64 b);
 static N_INLINE(NI, addInt)(NI a, NI b);
 N_NIMCALL(void, HEX2D_85256)(bigint85005 a, bigint85005 b, bigint85005* Result);
-N_NIMCALL(void, unsureAsgnRef)(void** dest, void* src);
 N_NIMCALL(NI, cmp_85264)(bigint85005 a, bigint85005 b);
 N_NIMCALL(void, failedassertimpl_81021)(NimStringDesc* msg);
 N_NIMCALL(NIM_BOOL, HEX3DHEX3D_85443)(bigint85005 a, bigint85005 b);
@@ -77,9 +77,19 @@ N_NIMCALL(NIM_BOOL, HEX21HEX3D_85464)(bigint85005 a, bigint85005 b);
 N_NIMCALL(NIM_BOOL, HEX3C_85471)(bigint85005 a, bigint85005 b);
 N_NIMCALL(NIM_BOOL, HEX3E_85479)(bigint85005 a, bigint85005 b);
 N_NIMCALL(void, HEX2F_85487)(bigint85005 a, bigint85005 b, bigint85005* Result);
+N_NIMCALL(void, mod_85497)(bigint85005 a, bigint85005 b, bigint85005* Result);
+N_NIMCALL(NimStringDesc*, HEX24_85508)(bigint85005 a);
+N_NIMCALL(NimStringDesc*, copyString)(NimStringDesc* src);
+static N_INLINE(void, appendChar)(NimStringDesc* dest, NIM_CHAR c);
+static N_INLINE(void, appendString)(NimStringDesc* dest, NimStringDesc* src);
+N_NIMCALL(NimStringDesc*, rawNewString)(NI space);
 STRING_LITERAL(TMP142, "(len|len|len|len|len|len)(a) (==|==|==|==|==|==|==|==|==|==|==|"
 "==|==|==|==|==|==|==|==|==)\015\012    L seq modified while iterating "
 "over it", 134);
+STRING_LITERAL(TMP143, "", 0);
+STRING_LITERAL(TMP144, "0123456789ABCDEF", 16);
+STRING_LITERAL(TMP145, "0x-", 3);
+STRING_LITERAL(TMP146, "0x", 2);
 NI64 maxint_85010;
 extern TNimType NTI122; /* uint32 */
 TNimType NTI85003; /* BigIntDigits */
@@ -105,16 +115,13 @@ static N_INLINE(void, popFrame)(void) {
 }
 
 N_NIMCALL(void, initbigint_85015)(NU32 val, bigint85005* Result) {
-	bigintdigits85003* LOC1;
-	TY85035 LOC2;
+	TY85035 LOC1;
 	nimfr("initBigInt", "bigint.nim")
 	nimln(14, "bigint.nim");
 	nimln(14, "bigint.nim");
-	LOC1 = 0;
-	LOC1 = (bigintdigits85003*) newSeq((&NTI85003), 1);
-	LOC2[0] = val;
-	LOC1->data[0] = LOC2[0];
-	genericSeqAssign(&(*Result).Digits, ((bigintdigits85003*) (LOC1)), (&NTI85003));
+	unsureAsgnRef((void**) &(*Result).Digits, (bigintdigits85003*) newSeq((&NTI85003), 1));
+	LOC1[0] = val;
+	(*Result).Digits->data[0] = LOC1[0];
 	nimln(15, "bigint.nim");
 	(*Result).Neg = NIM_FALSE;
 	popFrame();
@@ -688,33 +695,161 @@ N_NIMCALL(void, HEX2F_85487)(bigint85005 a, bigint85005 b, bigint85005* Result) 
 	tmp.Neg = a.Neg;
 	nimln(119, "bigint.nim");
 	while (1) {
-		bigint85005 LOC2;
-		NIM_BOOL LOC3;
+		NIM_BOOL LOC2;
+		bigint85005 LOC3;
 		bigint85005 LOC4;
 		bigint85005 LOC5;
-		bigint85005 LOC6;
 		nimln(119, "bigint.nim");
-		nimln(119, "bigint.nim");
-		memset((void*)&LOC2, 0, sizeof(LOC2));
-		initbigint_85015(((NU32) 0), &LOC2);
-		LOC3 = 0;
-		LOC3 = HEX3E_85479(tmp, LOC2);
-		if (!LOC3) goto LA1;
+		LOC2 = 0;
+		LOC2 = HEX3E_85479(tmp, b);
+		if (!LOC2) goto LA1;
 		nimln(120, "bigint.nim");
+		memset((void*)&LOC3, 0, sizeof(LOC3));
+		HEX2D_85256(tmp, b, &LOC3);
+		tmp.Digits = LOC3.Digits;
+		tmp.Neg = LOC3.Neg;
+		nimln(121, "bigint.nim");
+		nimln(121, "bigint.nim");
 		memset((void*)&LOC4, 0, sizeof(LOC4));
-		HEX2D_85256(tmp, b, &LOC4);
-		tmp.Digits = LOC4.Digits;
-		tmp.Neg = LOC4.Neg;
-		nimln(121, "bigint.nim");
-		nimln(121, "bigint.nim");
+		initbigint_85015(((NU32) 1), &LOC4);
 		memset((void*)&LOC5, 0, sizeof(LOC5));
-		initbigint_85015(((NU32) 1), &LOC5);
-		memset((void*)&LOC6, 0, sizeof(LOC6));
-		HEX2B_85105((*Result), LOC5, &LOC6);
-		unsureAsgnRef((void**) &(*Result).Digits, LOC6.Digits);
-		(*Result).Neg = LOC6.Neg;
+		HEX2B_85105((*Result), LOC4, &LOC5);
+		unsureAsgnRef((void**) &(*Result).Digits, LOC5.Digits);
+		(*Result).Neg = LOC5.Neg;
 	} LA1: ;
 	popFrame();
+}
+
+N_NIMCALL(void, mod_85497)(bigint85005 a, bigint85005 b, bigint85005* Result) {
+	bigint85005 tmp;
+	nimfr("mod", "bigint.nim")
+	nimln(124, "bigint.nim");
+	genericSeqAssign(&tmp.Digits, a.Digits, (&NTI85003));
+	tmp.Neg = a.Neg;
+	nimln(125, "bigint.nim");
+	while (1) {
+		NIM_BOOL LOC2;
+		bigint85005 LOC3;
+		nimln(125, "bigint.nim");
+		LOC2 = 0;
+		LOC2 = HEX3E_85479(tmp, b);
+		if (!LOC2) goto LA1;
+		nimln(126, "bigint.nim");
+		memset((void*)&LOC3, 0, sizeof(LOC3));
+		HEX2D_85256(tmp, b, &LOC3);
+		tmp.Digits = LOC3.Digits;
+		tmp.Neg = LOC3.Neg;
+	} LA1: ;
+	nimln(127, "bigint.nim");
+	genericSeqAssign(&(*Result).Digits, tmp.Digits, (&NTI85003));
+	(*Result).Neg = tmp.Neg;
+	popFrame();
+}
+
+static N_INLINE(void, appendChar)(NimStringDesc* dest, NIM_CHAR c) {
+	(*dest).data[((*dest).Sup.len)- 0] = c;
+	(*dest).data[((NI64)((*dest).Sup.len + 1))- 0] = 0;
+	(*dest).Sup.len += 1;
+}
+
+static N_INLINE(void, appendString)(NimStringDesc* dest, NimStringDesc* src) {
+	memcpy(((NCSTRING) (&(*dest).data[((*dest).Sup.len)- 0])), ((NCSTRING) ((*src).data)), (NI64)((*src).Sup.len + 1));
+	(*dest).Sup.len += (*src).Sup.len;
+}
+
+N_NIMCALL(NimStringDesc*, HEX24_85508)(bigint85005 a) {
+	NimStringDesc* result;
+	bigint85005 hexbase;
+	bigint85005 zero;
+	bigint85005 tmp;
+	nimfr("$", "bigint.nim")
+	result = 0;
+	nimln(132, "bigint.nim");
+	result = copyString(((NimStringDesc*) &TMP143));
+	nimln(134, "bigint.nim");
+	chckNil((void*)&hexbase);
+	memset((void*)&hexbase, 0, sizeof(hexbase));
+	initbigint_85015(((NU32) 16), &hexbase);
+	nimln(135, "bigint.nim");
+	chckNil((void*)&zero);
+	memset((void*)&zero, 0, sizeof(zero));
+	initbigint_85015(((NU32) 0), &zero);
+	memset((void*)&tmp, 0, sizeof(tmp));
+	nimln(137, "bigint.nim");
+	{
+		if (!a.Neg) goto LA3;
+		nimln(138, "bigint.nim");
+		chckNil((void*)&tmp);
+		memset((void*)&tmp, 0, sizeof(tmp));
+		invert_85040(a, &tmp);
+	}
+	goto LA1;
+	LA3: ;
+	{
+		nimln(140, "bigint.nim");
+		genericSeqAssign(&tmp.Digits, a.Digits, (&NTI85003));
+		tmp.Neg = a.Neg;
+	}
+	LA1: ;
+	nimln(141, "bigint.nim");
+	while (1) {
+		NIM_BOOL LOC7;
+		bigint85005 digit;
+		bigint85005 LOC8;
+		NI intdigit;
+		NimStringDesc* LOC9;
+		nimln(141, "bigint.nim");
+		LOC7 = 0;
+		LOC7 = HEX3E_85479(tmp, zero);
+		if (!LOC7) goto LA6;
+		nimln(142, "bigint.nim");
+		chckNil((void*)&digit);
+		memset((void*)&digit, 0, sizeof(digit));
+		mod_85497(tmp, hexbase, &digit);
+		nimln(143, "bigint.nim");
+		memset((void*)&LOC8, 0, sizeof(LOC8));
+		HEX2F_85487(tmp, hexbase, &LOC8);
+		tmp.Digits = LOC8.Digits;
+		tmp.Neg = LOC8.Neg;
+		nimln(144, "bigint.nim");
+		if ((NU)(0) >= (NU)(digit.Digits->Sup.len)) raiseIndexError();
+		intdigit = ((NI) (digit.Digits->data[0]));
+		nimln(145, "bigint.nim");
+		nimln(145, "bigint.nim");
+		LOC9 = 0;
+		if ((NU)(intdigit) > (NU)(((NimStringDesc*) &TMP144)->Sup.len)) raiseIndexError();
+		LOC9 = rawNewString(result->Sup.len + 1);
+appendChar(LOC9, ((NimStringDesc*) &TMP144)->data[intdigit]);
+appendString(LOC9, result);
+		result = LOC9;
+	} LA6: ;
+	nimln(146, "bigint.nim");
+	{
+		NimStringDesc* LOC14;
+		if (!a.Neg) goto LA12;
+		nimln(147, "bigint.nim");
+		nimln(147, "bigint.nim");
+		LOC14 = 0;
+		LOC14 = rawNewString(result->Sup.len + 3);
+appendString(LOC14, ((NimStringDesc*) &TMP145));
+appendString(LOC14, result);
+		result = LOC14;
+	}
+	goto LA10;
+	LA12: ;
+	{
+		NimStringDesc* LOC16;
+		nimln(149, "bigint.nim");
+		nimln(149, "bigint.nim");
+		LOC16 = 0;
+		LOC16 = rawNewString(result->Sup.len + 2);
+appendString(LOC16, ((NimStringDesc*) &TMP146));
+appendString(LOC16, result);
+		result = LOC16;
+	}
+	LA10: ;
+	popFrame();
+	return result;
 }
 N_NOINLINE(void, bigintInit)(void) {
 	nimfr("bigint", "bigint.nim")
