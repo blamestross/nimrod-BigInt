@@ -66,13 +66,13 @@ N_NOINLINE(void, raiseOverflow)(void);
 N_NOINLINE(void, raiseIndexError)(void);
 N_NIMCALL(NI64, mulInt64)(NI64 a, NI64 b);
 N_NIMCALL(TGenericSeq*, incrSeq)(TGenericSeq* seq, NI elemsize);
-N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result);
-static N_INLINE(NI64, subInt64)(NI64 a, NI64 b);
-static N_INLINE(NI, addInt)(NI a, NI b);
-N_NIMCALL(void, HEX2B_84233)(bigint84006 a, bigint84006 b, bigint84006* Result);
+N_NIMCALL(void, HEX2B_84106)(bigint84006 a, bigint84006 b, bigint84006* Result);
 static N_INLINE(NI64, addInt64)(NI64 a, NI64 b);
-N_NIMCALL(NimStringDesc*, HEX24_84358)(bigintdigits84004* x_84364);
-N_NIMCALL(NimStringDesc*, collectiontostring_84368)(bigintdigits84004* x_84372, NimStringDesc* b_84374, NimStringDesc* e_84376);
+static N_INLINE(NI, addInt)(NI a, NI b);
+N_NIMCALL(void, HEX2D_84220)(bigint84006 a, bigint84006 b, bigint84006* Result);
+N_NIMCALL(void, unsureAsgnRef)(void** dest, void* src);
+N_NIMCALL(NimStringDesc*, HEX24_84238)(bigintdigits84004* x_84244);
+N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, NimStringDesc* b_84254, NimStringDesc* e_84256);
 static N_INLINE(void, initStackBottom)(void);
 N_NOINLINE(void, setStackBottom)(void* thestackbottom);
 N_NOINLINE(void, systemInit)(void);
@@ -85,9 +85,9 @@ TNimType NTI84004; /* BigIntDigits */
 extern TFrame* frameptr_13038;
 TNimType NTI84006; /* BigInt */
 extern TNimType NTI134; /* bool */
-bigint84006 a_84347;
-bigint84006 b_84350;
-bigint84006 c_84353;
+bigint84006 a_84227;
+bigint84006 b_84230;
+bigint84006 c_84233;
 N_NIMCALL(void, TMP125)(void* p, NI op) {
 	bigintdigits84004* a;
 	NI LOC1;
@@ -188,16 +188,16 @@ N_NIMCALL(void, invert_84042)(bigint84006 a, bigint84006* Result) {
 	popFrame();
 }
 
-static N_INLINE(NI64, subInt64)(NI64 a, NI64 b) {
+static N_INLINE(NI64, addInt64)(NI64 a, NI64 b) {
 	NI64 result;
 	result = 0;
-	result = (NI64)((NU64)(a) - (NU64)(b));
+	result = (NI64)((NU64)(a) + (NU64)(b));
 	{
 		NIM_BOOL LOC3;
 		LOC3 = 0;
 		LOC3 = (0 <= (NI64)(result ^ a));
 		if (LOC3) goto LA4;
-		LOC3 = (0 <= (NI64)(result ^ (NI64)((NU64) ~(b))));
+		LOC3 = (0 <= (NI64)(result ^ b));
 		LA4: ;
 		if (!LOC3) goto LA5;
 		goto BeforeRet;
@@ -228,11 +228,11 @@ static N_INLINE(NI, addInt)(NI a, NI b) {
 	return result;
 }
 
-N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) {
+N_NIMCALL(void, HEX2B_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) {
 	bigintdigits84004* digits;
 	NI i;
 	NI64 carry;
-	nimfr("-", "bigint.nim")
+	nimfr("+", "bigint.nim")
 	nimln(31, "bigint.nim");
 	chckNil((void*)Result);
 	genericReset((void*)Result, (&NTI84006));
@@ -277,19 +277,19 @@ N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) 
 				nimln(39, "bigint.nim");
 				if ((NU)(i) >= (NU)(a.Digits->Sup.len)) raiseIndexError();
 				if ((NU)(i) >= (NU)(b.Digits->Sup.len)) raiseIndexError();
-				TMP130 = subInt64(((NI64) (a.Digits->data[i])), ((NI64) (b.Digits->data[i])));
-				TMP131 = subInt64((NI64)(TMP130), carry);
+				TMP130 = addInt64(((NI64) (a.Digits->data[i])), ((NI64) (b.Digits->data[i])));
+				TMP131 = addInt64((NI64)(TMP130), carry);
 				tmp = (NI64)(TMP131);
 				nimln(40, "bigint.nim");
 				{
 					NI64 TMP132;
 					nimln(40, "bigint.nim");
-					if (!(maxint_84011 <= tmp)) goto LA14;
+					if (!(tmp < 0)) goto LA14;
 					nimln(41, "bigint.nim");
 					carry = 1;
 					nimln(42, "bigint.nim");
 					nimln(42, "bigint.nim");
-					TMP132 = subInt64(tmp, maxint_84011);
+					TMP132 = addInt64(tmp, maxint_84011);
 					tmp = (NI64)(TMP132);
 				}
 				goto LA12;
@@ -307,18 +307,18 @@ N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) 
 				nimln(46, "bigint.nim");
 				nimln(46, "bigint.nim");
 				if ((NU)(i) >= (NU)(a.Digits->Sup.len)) raiseIndexError();
-				TMP133 = subInt64(((NI64) (a.Digits->data[i])), carry);
+				TMP133 = addInt64(((NI64) (a.Digits->data[i])), carry);
 				tmp = (NI64)(TMP133);
 				nimln(47, "bigint.nim");
 				{
 					NI64 TMP134;
 					nimln(47, "bigint.nim");
-					if (!(maxint_84011 <= tmp)) goto LA20;
+					if (!(tmp < 0)) goto LA20;
 					nimln(48, "bigint.nim");
 					carry = 1;
 					nimln(49, "bigint.nim");
 					nimln(49, "bigint.nim");
-					TMP134 = subInt64(tmp, maxint_84011);
+					TMP134 = addInt64(tmp, maxint_84011);
 					tmp = (NI64)(TMP134);
 				}
 				goto LA18;
@@ -338,18 +338,18 @@ N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) 
 			nimln(53, "bigint.nim");
 			nimln(53, "bigint.nim");
 			if ((NU)(i) >= (NU)(b.Digits->Sup.len)) raiseIndexError();
-			TMP135 = subInt64(((NI64) (((NI) (b.Digits->data[i])))), carry);
+			TMP135 = addInt64(((NI64) (((NI) (b.Digits->data[i])))), carry);
 			tmp = (NI64)(TMP135);
 			nimln(54, "bigint.nim");
 			{
 				NI64 TMP136;
 				nimln(54, "bigint.nim");
-				if (!(maxint_84011 <= tmp)) goto LA26;
+				if (!(tmp < 0)) goto LA26;
 				nimln(55, "bigint.nim");
 				carry = 1;
 				nimln(56, "bigint.nim");
 				nimln(56, "bigint.nim");
-				TMP136 = subInt64(tmp, maxint_84011);
+				TMP136 = addInt64(tmp, maxint_84011);
 				tmp = (NI64)(TMP136);
 			}
 			goto LA24;
@@ -374,8 +374,7 @@ N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) 
 		nimln(61, "bigint.nim");
 		if (!(0 < carry)) goto LA31;
 		nimln(62, "bigint.nim");
-		digits = (bigintdigits84004*) incrSeq(&(digits)->Sup, sizeof(NU32));
-		digits->data[digits->Sup.len-1] = ((NU32) (carry));
+		(*Result).Neg = NIM_TRUE;
 	}
 	LA31: ;
 	nimln(63, "bigint.nim");
@@ -383,177 +382,18 @@ N_NIMCALL(void, HEX2D_84106)(bigint84006 a, bigint84006 b, bigint84006* Result) 
 	popFrame();
 }
 
-static N_INLINE(NI64, addInt64)(NI64 a, NI64 b) {
-	NI64 result;
-	result = 0;
-	result = (NI64)((NU64)(a) + (NU64)(b));
-	{
-		NIM_BOOL LOC3;
-		LOC3 = 0;
-		LOC3 = (0 <= (NI64)(result ^ a));
-		if (LOC3) goto LA4;
-		LOC3 = (0 <= (NI64)(result ^ b));
-		LA4: ;
-		if (!LOC3) goto LA5;
-		goto BeforeRet;
-	}
-	LA5: ;
-	raiseOverflow();
-	BeforeRet: ;
-	return result;
-}
-
-N_NIMCALL(void, HEX2B_84233)(bigint84006 a, bigint84006 b, bigint84006* Result) {
-	bigintdigits84004* digits;
-	NI i;
-	NI64 carry;
-	nimfr("+", "bigint.nim")
-	nimln(67, "bigint.nim");
-	chckNil((void*)Result);
-	genericReset((void*)Result, (&NTI84006));
-	initbigint_84017(((NU32) 0), Result);
-	nimln(68, "bigint.nim");
-	digits = (bigintdigits84004*) newSeq((&NTI84004), 0);
-	nimln(69, "bigint.nim");
-	i = 0;
-	nimln(70, "bigint.nim");
-	carry = 0;
-	nimln(71, "bigint.nim");
-	while (1) {
-		NIM_BOOL LOC2;
-		NI64 tmp;
-		NI TMP145;
-		nimln(71, "bigint.nim");
-		LOC2 = 0;
-		nimln(71, "bigint.nim");
-		nimln(71, "bigint.nim");
-		LOC2 = (i < a.Digits->Sup.len);
-		if (LOC2) goto LA3;
-		nimln(71, "bigint.nim");
-		nimln(71, "bigint.nim");
-		LOC2 = (i < b.Digits->Sup.len);
-		LA3: ;
-		if (!LOC2) goto LA1;
-		tmp = 0;
-		nimln(73, "bigint.nim");
-		{
-			nimln(73, "bigint.nim");
-			nimln(73, "bigint.nim");
-			if (!(i < a.Digits->Sup.len)) goto LA6;
-			nimln(74, "bigint.nim");
-			{
-				NI64 TMP138;
-				NI64 TMP139;
-				nimln(74, "bigint.nim");
-				nimln(74, "bigint.nim");
-				if (!(i < b.Digits->Sup.len)) goto LA10;
-				nimln(75, "bigint.nim");
-				nimln(75, "bigint.nim");
-				nimln(75, "bigint.nim");
-				if ((NU)(i) >= (NU)(a.Digits->Sup.len)) raiseIndexError();
-				if ((NU)(i) >= (NU)(b.Digits->Sup.len)) raiseIndexError();
-				TMP138 = addInt64(((NI64) (a.Digits->data[i])), ((NI64) (b.Digits->data[i])));
-				TMP139 = addInt64((NI64)(TMP138), carry);
-				tmp = (NI64)(TMP139);
-				nimln(76, "bigint.nim");
-				{
-					NI64 TMP140;
-					nimln(76, "bigint.nim");
-					if (!(tmp < 0)) goto LA14;
-					nimln(77, "bigint.nim");
-					carry = 1;
-					nimln(78, "bigint.nim");
-					nimln(78, "bigint.nim");
-					TMP140 = addInt64(tmp, maxint_84011);
-					tmp = (NI64)(TMP140);
-				}
-				goto LA12;
-				LA14: ;
-				{
-					nimln(80, "bigint.nim");
-					carry = 0;
-				}
-				LA12: ;
-			}
-			goto LA8;
-			LA10: ;
-			{
-				NI64 TMP141;
-				nimln(82, "bigint.nim");
-				nimln(82, "bigint.nim");
-				if ((NU)(i) >= (NU)(a.Digits->Sup.len)) raiseIndexError();
-				TMP141 = addInt64(((NI64) (a.Digits->data[i])), carry);
-				tmp = (NI64)(TMP141);
-				nimln(83, "bigint.nim");
-				{
-					NI64 TMP142;
-					nimln(83, "bigint.nim");
-					if (!(tmp < 0)) goto LA20;
-					nimln(84, "bigint.nim");
-					carry = 1;
-					nimln(85, "bigint.nim");
-					nimln(85, "bigint.nim");
-					TMP142 = addInt64(tmp, maxint_84011);
-					tmp = (NI64)(TMP142);
-				}
-				goto LA18;
-				LA20: ;
-				{
-					nimln(87, "bigint.nim");
-					carry = 0;
-				}
-				LA18: ;
-			}
-			LA8: ;
-		}
-		goto LA4;
-		LA6: ;
-		{
-			NI64 TMP143;
-			nimln(89, "bigint.nim");
-			nimln(89, "bigint.nim");
-			if ((NU)(i) >= (NU)(b.Digits->Sup.len)) raiseIndexError();
-			TMP143 = addInt64(((NI64) (((NI) (b.Digits->data[i])))), carry);
-			tmp = (NI64)(TMP143);
-			nimln(90, "bigint.nim");
-			{
-				NI64 TMP144;
-				nimln(90, "bigint.nim");
-				if (!(tmp < 0)) goto LA26;
-				nimln(91, "bigint.nim");
-				carry = 1;
-				nimln(92, "bigint.nim");
-				nimln(92, "bigint.nim");
-				TMP144 = addInt64(tmp, maxint_84011);
-				tmp = (NI64)(TMP144);
-			}
-			goto LA24;
-			LA26: ;
-			{
-				nimln(94, "bigint.nim");
-				carry = 0;
-			}
-			LA24: ;
-		}
-		LA4: ;
-		nimln(95, "bigint.nim");
-		digits = (bigintdigits84004*) incrSeq(&(digits)->Sup, sizeof(NU32));
-		digits->data[digits->Sup.len-1] = ((NU32) (tmp));
-		nimln(96, "bigint.nim");
-		nimln(96, "bigint.nim");
-		TMP145 = addInt(i, 1);
-		i = (NI64)(TMP145);
-	} LA1: ;
-	nimln(97, "bigint.nim");
-	{
-		nimln(97, "bigint.nim");
-		if (!(0 < carry)) goto LA31;
-		nimln(98, "bigint.nim");
-		(*Result).Neg = NIM_TRUE;
-	}
-	LA31: ;
-	nimln(99, "bigint.nim");
-	genericSeqAssign(&(*Result).Digits, digits, (&NTI84004));
+N_NIMCALL(void, HEX2D_84220)(bigint84006 a, bigint84006 b, bigint84006* Result) {
+	bigint84006 LOC1;
+	bigint84006 LOC2;
+	nimfr("-", "bigint.nim")
+	nimln(66, "bigint.nim");
+	nimln(66, "bigint.nim");
+	memset((void*)&LOC1, 0, sizeof(LOC1));
+	invert_84042(b, &LOC1);
+	memset((void*)&LOC2, 0, sizeof(LOC2));
+	HEX2B_84106(a, LOC1, &LOC2);
+	unsureAsgnRef((void**) &(*Result).Digits, LOC2.Digits);
+	(*Result).Neg = LOC2.Neg;
 	popFrame();
 }
 
@@ -588,8 +428,7 @@ int main(int argc, char** args, char** env) {
 
 N_NOINLINE(void, bigintInit)(void) {
 	NimStringDesc* LOC1;
-	bigint84006 LOC2;
-	NimStringDesc* LOC3;
+	NimStringDesc* LOC2;
 	nimfr("bigint", "bigint.nim")
 	nimln(8, "bigint.nim");
 	maxint_84011 = 2147483647;
@@ -598,26 +437,23 @@ N_NOINLINE(void, bigintInit)(void) {
 	LOC1 = 0;
 	LOC1 = nimInt64ToStr(maxint_84011);
 	printf("%s\015\012", (LOC1)->data);
-	nimln(103, "bigint.nim");
-	chckNil((void*)&a_84347);
-	genericReset((void*)&a_84347, (&NTI84006));
-	initbigint_84017(((NU32) 2), &a_84347);
-	nimln(104, "bigint.nim");
-	chckNil((void*)&b_84350);
-	genericReset((void*)&b_84350, (&NTI84006));
-	initbigint_84017(((NU32) 10), &b_84350);
-	nimln(107, "bigint.nim");
-	nimln(107, "bigint.nim");
-	memset((void*)&LOC2, 0, sizeof(LOC2));
-	invert_84042(a_84347, &LOC2);
-	chckNil((void*)&c_84353);
-	genericReset((void*)&c_84353, (&NTI84006));
-	HEX2B_84233(b_84350, LOC2, &c_84353);
-	nimln(108, "bigint.nim");
-	nimln(108, "bigint.nim");
-	LOC3 = 0;
-	LOC3 = HEX24_84358(c_84353.Digits);
-	printf("%s\015\012", (LOC3)->data);
+	nimln(70, "bigint.nim");
+	chckNil((void*)&a_84227);
+	genericReset((void*)&a_84227, (&NTI84006));
+	initbigint_84017(((NU32) 2), &a_84227);
+	nimln(71, "bigint.nim");
+	chckNil((void*)&b_84230);
+	genericReset((void*)&b_84230, (&NTI84006));
+	initbigint_84017(((NU32) 10), &b_84230);
+	nimln(74, "bigint.nim");
+	chckNil((void*)&c_84233);
+	genericReset((void*)&c_84233, (&NTI84006));
+	HEX2D_84220(b_84230, a_84227, &c_84233);
+	nimln(75, "bigint.nim");
+	nimln(75, "bigint.nim");
+	LOC2 = 0;
+	LOC2 = HEX24_84238(c_84233.Digits);
+	printf("%s\015\012", (LOC2)->data);
 	popFrame();
 }
 

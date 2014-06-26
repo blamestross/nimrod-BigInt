@@ -686,7 +686,7 @@ N_NIMCALL(void, insert_82001)(NimStringDesc** x, NimStringDesc* item, NI i);
 N_NIMCALL(void, safeadd_82411)(NimStringDesc** x, NIM_CHAR y);
 N_NIMCALL(void, safeadd_82417)(NimStringDesc** x, NimStringDesc* y);
 N_NIMCALL(TNimObject, locals_82602)(void);
-N_NIMCALL(NimStringDesc*, collectiontostring_84368)(bigintdigits84004* x_84372, NimStringDesc* b_84374, NimStringDesc* e_84376);
+N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, NimStringDesc* b_84254, NimStringDesc* e_84256);
 STRING_LITERAL(TMP2, "out of memory", 13);
 STRING_LITERAL(TMP4, "rb", 2);
 STRING_LITERAL(TMP5, "wb", 2);
@@ -770,10 +770,10 @@ STRING_LITERAL(TMP96, " --> ", 5);
 STRING_LITERAL(TMP97, "\"", 1);
 STRING_LITERAL(TMP98, "\\10\"\015\012\"", 7);
 STRING_LITERAL(TMP99, "(invalid data!)", 15);
-STRING_LITERAL(TMP146, "(len|len|len|len|len|len)(a) (==|==|==|==|==|==|==|==|==|==|==|"
+STRING_LITERAL(TMP138, "(len|len|len|len|len|len)(a) (==|==|==|==|==|==|==|==|==|==|==|"
 "==|==|==|==|==|==|==|==|==)\015\012    L seq modified while iterating "
 "over it", 134);
-STRING_LITERAL(TMP147, "@[", 2);
+STRING_LITERAL(TMP139, "@[", 2);
 NI nim_program_result;
 TY6815 globalraisehook_6819;
 TY6820 localraisehook_6824;
@@ -11395,32 +11395,32 @@ N_NIMCALL(TNimObject, locals_82602)(void) {
 	return result;
 }
 
-N_NIMCALL(NimStringDesc*, collectiontostring_84368)(bigintdigits84004* x_84372, NimStringDesc* b_84374, NimStringDesc* e_84376) {
+N_NIMCALL(NimStringDesc*, collectiontostring_84248)(bigintdigits84004* x_84252, NimStringDesc* b_84254, NimStringDesc* e_84256) {
 	NimStringDesc* result;
 	NIM_BOOL firstelement;
-	NU32 value_84614;
-	NI i_84616;
-	NI l_84618;
+	NU32 value_84414;
+	NI i_84416;
+	NI l_84418;
 	nimfr("collectionToString", "system.nim")
 	result = 0;
 	nimln(1809, "system.nim");
-	result = copyString(b_84374);
+	result = copyString(b_84254);
 	nimln(1810, "system.nim");
 	firstelement = NIM_TRUE;
-	value_84614 = 0;
+	value_84414 = 0;
 	nimln(2795, "system.nim");
-	i_84616 = 0;
+	i_84416 = 0;
 	nimln(2796, "system.nim");
 	nimln(2796, "system.nim");
-	l_84618 = x_84372->Sup.len;
+	l_84418 = x_84252->Sup.len;
 	nimln(2797, "system.nim");
 	while (1) {
 		NimStringDesc* LOC6;
 		nimln(2797, "system.nim");
-		if (!(i_84616 < l_84618)) goto LA1;
+		if (!(i_84416 < l_84418)) goto LA1;
 		nimln(2798, "system.nim");
-		if ((NU)(i_84616) >= (NU)(x_84372->Sup.len)) raiseIndexError();
-		value_84614 = x_84372->data[i_84616];
+		if ((NU)(i_84416) >= (NU)(x_84252->Sup.len)) raiseIndexError();
+		value_84414 = x_84252->data[i_84416];
 		nimln(1812, "system.nim");
 		{
 			nimln(1812, "system.nim");
@@ -11433,38 +11433,38 @@ appendString(result, ((NimStringDesc*) &TMP83));
 		nimln(1813, "system.nim");
 		nimln(1813, "system.nim");
 		LOC6 = 0;
-		LOC6 = HEX24_5001(((NU64) (value_84614)));
+		LOC6 = HEX24_5001(((NU64) (value_84414)));
 		result = resizeString(result, LOC6->Sup.len + 0);
 appendString(result, LOC6);
 		nimln(1814, "system.nim");
 		firstelement = NIM_FALSE;
 		nimln(2799, "system.nim");
-		i_84616 = addInt(i_84616, 1);
+		i_84416 = addInt(i_84416, 1);
 		nimln(2800, "system.nim");
 		{
 			nimln(2800, "system.nim");
 			nimln(2800, "system.nim");
 			nimln(2800, "system.nim");
-			if (!!((x_84372->Sup.len == l_84618))) goto LA9;
+			if (!!((x_84252->Sup.len == l_84418))) goto LA9;
 			nimln(2800, "system.nim");
-			failedassertimpl_81021(((NimStringDesc*) &TMP146));
+			failedassertimpl_81021(((NimStringDesc*) &TMP138));
 		}
 		LA9: ;
 	} LA1: ;
 	nimln(1815, "system.nim");
-	result = resizeString(result, e_84376->Sup.len + 0);
-appendString(result, e_84376);
+	result = resizeString(result, e_84256->Sup.len + 0);
+appendString(result, e_84256);
 	popFrame();
 	return result;
 }
 
-N_NIMCALL(NimStringDesc*, HEX24_84358)(bigintdigits84004* x_84364) {
+N_NIMCALL(NimStringDesc*, HEX24_84238)(bigintdigits84004* x_84244) {
 	NimStringDesc* result;
 	nimfr("$", "system.nim")
 	result = 0;
 	nimln(1826, "system.nim");
 	nimln(1831, "system.nim");
-	result = collectiontostring_84368(x_84364, ((NimStringDesc*) &TMP147), ((NimStringDesc*) &TMP91));
+	result = collectiontostring_84248(x_84244, ((NimStringDesc*) &TMP139), ((NimStringDesc*) &TMP91));
 	popFrame();
 	return result;
 }

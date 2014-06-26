@@ -27,9 +27,6 @@ proc invert(A:BigInt) : BigInt =
   result.digits = digits
 
 
-proc `-` *(A:BigInt,B:BigInt) : BigInt=
-  result = A + invert(B)
-
 proc `+` *(A:BigInt,B:BigInt) : BigInt=
   result = initBigInt(0)
   var digits : BigIntDigits = @[]
@@ -65,11 +62,14 @@ proc `+` *(A:BigInt,B:BigInt) : BigInt=
     result.neg = true
   result.digits = digits
 
+proc `-` *(A:BigInt,B:BigInt) : BigInt=
+  result = A + invert(B)
+
   
 
 var A :BigInt = initBigInt(2)
 var B :BigInt = initBigInt(10)
 
 
-let C: BigInt = B+invert(A)
+let C: BigInt = B-A
 echo(C.digits)
