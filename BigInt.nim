@@ -9,7 +9,7 @@ var maxInt: int64 = 2 shl 31
 
 echo(maxInt)
 
-proc initBigInt(val: uint32): BigInt =
+proc initBigInt *(val: uint32): BigInt =
   result.digits = cast[BigIntDigits](@[val])
   result.neg = false
 
