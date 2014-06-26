@@ -120,6 +120,21 @@ proc `/`*(A:BigInt,B:BigInt) : BigInt =
     tmp = tmp - B
     result = result + initBigInt(1)
 
+proc `*`*(A:BigInt,B:BigInt) : BigInt = 
+  var zero : BigInt = initBigInt(0)
+  var one : BigInt = initBigInt(1)
+  result = zero
+  var tmp : BigInt
+  if A.neg:
+    tmp = invert(A)
+  else:
+    tmp = A
+  while tmp > zero:
+    tmp = tmp - one
+    result = result + B
+
+
+
 proc `mod`*(A:BigInt,B:BigInt) : BigInt = 
   var tmp : BigInt = A
   while tmp > B:
@@ -131,19 +146,11 @@ proc `mod`*(A:BigInt,B:BigInt) : BigInt =
 proc `$`*(A:BigInt) : string =
   result = ""
   const HexChars = "0123456789ABCDEF"
-  var hexBase : BigInt = initBigInt(16)
-  var zero : BigInt = initBigInt(0)
-  var tmp: BigInt
-  if A.neg:
-    tmp = invert(A)
-  else:
-    tmp = A
-  while tmp > zero:
-    let digit : BigInt = tmp mod hexBase
-    tmp = tmp / hexBase
-    let intDigit: int = int(digit.digits[0])
-    result = HexChars[intDigit] & result
-  if A.neg:
-    result = "0x-"&result
-  else:
-    result = "0x"&result
+  for d in A.digits:
+    var tmp : int = int(d)
+    for i in 0..8:
+      let digit : int = int(tmp mod 16)
+      let c : char = HexChars[digit]
+      result = c&result
+      tmp = tmp /% 16
+  return "0x"&result

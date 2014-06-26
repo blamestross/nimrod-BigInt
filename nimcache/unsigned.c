@@ -3,7 +3,7 @@
 /* The generated code is subject to the original license. */
 /* Compiled for: Windows, amd64, gcc */
 /* Command for C compiler:
-   "C:\Program Files (x86)\Nimrod\dist\mingw\bin\gcc.exe" -c  -w  -I"C:\Program Files (x86)\Nimrod\lib" -o c:\users\brnedan\documents\github\nimrod-bigint\nimcache\unsigned.o c:\users\brnedan\documents\github\nimrod-bigint\nimcache\unsigned.c */
+   gcc.exe -c  -w  -I"c:\Program Files (x86)\Nimrod\lib" -o f:\git\nimrod-bigint\nimcache\unsigned.o f:\git\nimrod-bigint\nimcache\unsigned.c */
 #define NIM_INTBITS 64
 #include "nimbase.h"
 static N_INLINE(void, nimFrame)(TFrame* s);

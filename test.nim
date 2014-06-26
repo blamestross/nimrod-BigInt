@@ -1,6 +1,6 @@
 import BigInt
 
-var A: BigInt = initBigInt(100)
-var B: BigInt = initBigInt(123)
+var A: BigInt = initBigInt(10)
+var B: BigInt = initBigInt(100023)
 
-echo(B mod A)
+echo(B / A)
