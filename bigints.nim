@@ -11,20 +11,22 @@ var maxInt: int64 = int64(high(uint32))
 
 
 proc initBigInt *(val: uint32): BigInt =
-  result.digits = BigIntDigits(@[val])
+  result.digits = @[val]
   result.neg = false
 
+proc initBigInt *(): BigInt =
+  result.digits = @[]
+  result.neg = false
 
 proc invert*(A:BigInt) : BigInt = 
-  result = initBigInt(0)
+  result = initBigInt()
   result.neg = not result.neg
-  var digits : BigIntDigits = @[]
   var i: int = A.digits.len -1
   while i >= 0:
     var tmp: uint32 = cast[uint32]((not cast[int32](A.digits[i])))
-    digits.add(cast[uint32](tmp))
+    result.digits.add(cast[uint32](tmp))
     i = i - 1
-  result.digits = digits
+
 
 
 proc `+` *(A:BigInt,B:BigInt) : BigInt=
@@ -141,7 +143,22 @@ proc `mod`*(A:BigInt,B:BigInt) : BigInt =
     tmp = tmp - B
   result = tmp
 
-#Big-integers are ordinal
+discard """
+proc `lsh`*(A:BigInt,i:int) : BigInt =
+  var C : BigInt
+  if i / 32 > 0: #we need to shift multiple sections
+    C = initBigInt(0)
+    C.digits = @[]
+    for x in 0..(i/32):
+      C.digits.add(0)
+    for x in A.digits:
+      C.digits.add(x)
+    result = lsh(C,i mod 32)
+
+"""
+
+
+
 
 proc `$`*(A:BigInt) : string =
   result = ""
