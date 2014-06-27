@@ -1,4 +1,6 @@
 import unsigned
+import strutils
+
 
 type
   BigIntDigits=seq[uint32] #a sequence of digits used for a big integer
@@ -7,7 +9,20 @@ type
     digits*:BigIntDigits  #posetive digits in base maxvalue(uint)+1
     neg*:bool #true if negative, false if zero or posetive
 
-var maxInt: int64 = int64(high(uint32))
+let maxInt*: int64 = int64(high(uint32))
+
+
+proc initBigInt *(val: uint32): BigInt
+proc initBigInt *(): BigInt
+
+
+proc `shl`*(A:BigInt,i:int) : BigInt
+proc invert*(A:BigInt) : BigInt
+proc `+` *(A:BigInt,B:BigInt) : BigInt
+proc `-` *(A:BigInt,B:BigInt) : BigInt
+proc cmp(A:BigInt,B:BigInt) : int
+proc `/`*(A:BigInt,B:BigInt) : BigInt
+proc `*`*(A:BigInt,B:BigInt) : BigInt 
 
 
 proc initBigInt *(val: uint32): BigInt =
@@ -100,20 +115,13 @@ proc cmp(A:BigInt,B:BigInt) : int =
 proc `==`*(A:BigInt,B:BigInt) : bool = 
   return cmp(A,B) == 0
 
-proc `>=`*(A:BigInt,B:BigInt) : bool = 
-  return cmp(A,B) >= 0
 
 proc `<=`*(A:BigInt,B:BigInt) : bool = 
   return cmp(A,B) <= 0
 
-proc `!=`*(A:BigInt,B:BigInt) : bool = 
-  return cmp(A,B) != 0
 
 proc `<`*(A:BigInt,B:BigInt) : bool = 
   return cmp(A,B) < 0
-
-proc `>`*(A:BigInt,B:BigInt) : bool = 
-  return cmp(A,B) > 0
 
 proc `/`*(A:BigInt,B:BigInt) : BigInt = 
   result = initBigInt(0)
@@ -122,52 +130,45 @@ proc `/`*(A:BigInt,B:BigInt) : BigInt =
     tmp = tmp - B
     result = result + initBigInt(1)
 
-proc `*`*(A:BigInt,B:BigInt) : BigInt = 
-  var zero : BigInt = initBigInt(0)
-  var one : BigInt = initBigInt(1)
-  result = zero
-  var tmp : BigInt
-  if A.neg:
-    tmp = invert(A)
-  else:
-    tmp = A
-  while tmp > zero:
-    tmp = tmp - one
-    result = result + B
-
-
-
 proc `mod`*(A:BigInt,B:BigInt) : BigInt = 
-  var tmp : BigInt = A
-  while tmp > B:
-    tmp = tmp - B
-  result = tmp
+  var C : BigInt = (A / B) * B
+  result = A - C
 
-discard """
-proc `lsh`*(A:BigInt,i:int) : BigInt =
-  var C : BigInt
-  if i / 32 > 0: #we need to shift multiple sections
-    C = initBigInt(0)
-    C.digits = @[]
-    for x in 0..(i/32):
+proc `shl`*(A:BigInt,i:int) : BigInt =
+  var j : int = i mod 32
+  var C : BigInt = initBigInt()
+  var val, carry : int64
+  if (i div 32) > 0: #we need to shift multiple sections
+    echo("BIG",i div 32)
+    for x in 0..((i div 32) - 1):
       C.digits.add(0)
-    for x in A.digits:
-      C.digits.add(x)
-    result = lsh(C,i mod 32)
+  for k in 1..A.digits.len:
+    var d : uint32 = A.digits[A.digits.len-k]
+    val = (cast[int64](d) shl j) + carry
+    carry = val shr 32
+    C.digits.add(uint32(val))
+    echo(carry,C.digits)
+  if carry > 0:
+    C.digits.add(uint32(carry))
+  echo(carry,C.digits)
 
-"""
+  result = C
+
+proc `*`*(A:BigInt,B:BigInt) : BigInt = 
+  result = initBigInt(0)
+  for i in 0..(A.digits.len-1):
+    var d : uint32 = A.digits[i]
+    for j in 0..32:
+      var one : uint32 = int(d shr uint32(i*32 + j)) and 1
+      if one == 1:
+        result = result + B shl (i*32 + j)
 
 
 
 
 proc `$`*(A:BigInt) : string =
   result = ""
-  const HexChars = "0123456789ABCDEF"
-  for d in A.digits:
-    var tmp : int = int(d)
-    for i in 0..8:
-      let digit : int = int(tmp mod 16)
-      let c : char = HexChars[digit]
-      result = c&result
-      tmp = tmp /% 16
+  for i in 1..A.digits.len:
+    var d : int = int(A.digits[A.digits.len - i])
+    result = result&toHex(int(d),8)
   return "0x"&result
