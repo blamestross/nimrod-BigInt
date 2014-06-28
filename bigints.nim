@@ -168,9 +168,10 @@ proc `shr`*(A:BigInt,i:int) : BigInt =
   var j : int = i mod 32
   var val, val2, carry : int64 # make variables with some extra space
   for d in C.digits:
-    val = (int64(d) + carry)
-    val2 = (val shr j) shl j
-    carry = val - val2
+    var buffed_d : int64 = int64(d)
+    val = (buffed_d shr j) + (carry shl j)
+    val2 = (buffed_d shr j) shl j
+    carry = buffed_d - val2
     echo(carry)
     result.digits.add( uint32(val shr j))
 
