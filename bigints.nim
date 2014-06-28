@@ -153,28 +153,26 @@ proc `shl`*(A:BigInt,i:int) : BigInt =
 
   result = C
 
-proc `shr`*(A:BigInt,i:int) : BigInt =
-  var C: BigInt = A
-  result = initBigInt()
-  result.neg = A.neg
-  if (i div 32) > 0: #we need to shift multiple sections
-    for x in 0..((i div 32) - 1):
-      if C.digits.len > 1:
-        C.digits = C.digits[1..(C.digits.len-1)]
-      else:
-        C.digits[0]=0
-  #we moved the int-level shifts
-  #now we need to move at the sub-int level
-  var j : int = i mod 32
-  var val, val2, carry : int64 # make variables with some extra space
-  for d in C.digits:
-    echo("j:",j)
-    var buffed_d : int64 = int64(d)
-    val = (buffed_d shr j) + (carry shl (32 - j))
-    val2 = (buffed_d shr j) shl j
-    carry = buffed_d - val2
-    echo("carry:",carry)
-    result.digits.add( uint32(val))
+proc `shr`*(A: BigInt, i: int) : BigInt =
+  let
+    bigShifts = i div 32
+    littleShifts = (i mod 32).uint32
+ 
+  result = BigInt(digits : newSeq[uint32](A.digits.len - bigshifts),
+                  neg : A.neg)
+ 
+  for shift in bigShifts..(A.digits.len-1):
+    result.digits[shift-bigShifts] = A.digits[shift]
+ 
+  for i in 0..(result.digits.len - 1):
+    # current bottom bits are next top bits
+    let carry = result.digits[i] shl (32.uint32 - littleShifts)
+ 
+    result.digits[i] = result.digits[i] shr littleShifts
+ 
+    # Make sure bottom bits are thrown away, no OOB errors
+    if i != 0:
+      result.digits[i-1] = result.digits[i-1] or carry
 
 
 

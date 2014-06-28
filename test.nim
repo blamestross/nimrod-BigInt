@@ -1,7 +1,5 @@
 import bigints
 
-var A: BigInt = initBigInt(uint32(0x123456))
-var B: BigInt 
-B = (A shl 200)
-echo(B)
-echo(B shr 160)#Here A equals B, off by 4-bits
+when isMainModule:
+  var a = initBigInt(0x123456)
+  echo(a shl 20 shr 24)
