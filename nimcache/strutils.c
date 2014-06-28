@@ -3,12 +3,69 @@
 /* The generated code is subject to the original license. */
 /* Compiled for: Windows, amd64, gcc */
 /* Command for C compiler:
-   "C:\Program Files (x86)\Nimrod\dist\mingw\bin\gcc.exe" -c  -w  -I"C:\Program Files (x86)\Nimrod\lib" -o c:\users\brnedan\documents\github\nimrod-bigint\nimcache\strutils.o c:\users\brnedan\documents\github\nimrod-bigint\nimcache\strutils.c */
+   gcc.exe -c  -w  -I"c:\Program Files (x86)\Nimrod\lib" -o f:\git\nimrod-bigint\nimcache\strutils.o f:\git\nimrod-bigint\nimcache\strutils.c */
 #define NIM_INTBITS 64
 #include "nimbase.h"
+typedef struct NimStringDesc NimStringDesc;
+typedef struct TGenericSeq TGenericSeq;
+struct  TGenericSeq  {
+NI len;
+NI reserved;
+};
+struct  NimStringDesc  {
+  TGenericSeq Sup;
+NIM_CHAR data[SEQ_DECL_SIZE];
+};
+N_NIMCALL(NimStringDesc*, mnewString)(NI len);
+N_NIMCALL(NimStringDesc*, mnewString)(NI len);
+static N_INLINE(NI, subInt)(NI a, NI b);
+N_NOINLINE(void, raiseOverflow)(void);
+N_NOINLINE(void, raiseIndexError)(void);
+static N_INLINE(NI64, addInt64)(NI64 a, NI64 b);
 static N_INLINE(void, nimFrame)(TFrame* s);
 static N_INLINE(void, popFrame)(void);
+STRING_LITERAL(TMP178, "0123456789ABCDEF", 16);
 extern TFrame* frameptr_13038;
+
+static N_INLINE(NI, subInt)(NI a, NI b) {
+	NI result;
+	result = 0;
+	result = (NI)((NU64)(a) - (NU64)(b));
+	{
+		NIM_BOOL LOC3;
+		LOC3 = 0;
+		LOC3 = (0 <= (NI)(result ^ a));
+		if (LOC3) goto LA4;
+		LOC3 = (0 <= (NI)(result ^ (NI)((NU64) ~(b))));
+		LA4: ;
+		if (!LOC3) goto LA5;
+		goto BeforeRet;
+	}
+	LA5: ;
+	raiseOverflow();
+	BeforeRet: ;
+	return result;
+}
+
+static N_INLINE(NI64, addInt64)(NI64 a, NI64 b) {
+	NI64 result;
+	result = 0;
+	result = (NI64)((NU64)(a) + (NU64)(b));
+	{
+		NIM_BOOL LOC3;
+		LOC3 = 0;
+		LOC3 = (0 <= (NI64)(result ^ a));
+		if (LOC3) goto LA4;
+		LOC3 = (0 <= (NI64)(result ^ b));
+		LA4: ;
+		if (!LOC3) goto LA5;
+		goto BeforeRet;
+	}
+	LA5: ;
+	raiseOverflow();
+	BeforeRet: ;
+	return result;
+}
 
 static N_INLINE(void, nimFrame)(TFrame* s) {
 	(*s).prev = frameptr_13038;
@@ -17,6 +74,52 @@ static N_INLINE(void, nimFrame)(TFrame* s) {
 
 static N_INLINE(void, popFrame)(void) {
 	frameptr_13038 = (*frameptr_13038).prev;
+}
+
+N_NIMCALL(NimStringDesc*, nsuToHex)(NI64 x, NI len) {
+	NimStringDesc* result;
+	NI64 shift;
+	NI j_90092;
+	NI HEX3Atmp_90095;
+	NI TMP177;
+	NI res_90097;
+	nimfr("toHex", "strutils.nim")
+	result = 0;
+	shift = 0;
+	nimln(361, "strutils.nim");
+	nimln(361, "strutils.nim");
+	result = mnewString(len);
+	j_90092 = 0;
+	HEX3Atmp_90095 = 0;
+	nimln(362, "strutils.nim");
+	nimln(362, "strutils.nim");
+	TMP177 = subInt(len, 1);
+	HEX3Atmp_90095 = (NI64)(TMP177);
+	nimln(1441, "system.nim");
+	res_90097 = HEX3Atmp_90095;
+	nimln(1442, "system.nim");
+	while (1) {
+		NI64 TMP179;
+		nimln(1442, "system.nim");
+		if (!(0 <= res_90097)) goto LA1;
+		nimln(1441, "system.nim");
+		j_90092 = res_90097;
+		nimln(363, "strutils.nim");
+		if ((NU)(j_90092) > (NU)(result->Sup.len)) raiseIndexError();
+		nimln(363, "strutils.nim");
+		nimln(363, "strutils.nim");
+		nimln(363, "strutils.nim");
+		if ((NU)((NI32)(((NI32)(NU32)(NU64)((NI64)((NU64)(x) >> (NU64)(shift)))) & ((NI32) 15))) > (NU)(((NimStringDesc*) &TMP178)->Sup.len)) raiseIndexError();
+		result->data[j_90092] = ((NimStringDesc*) &TMP178)->data[(NI32)(((NI32)(NU32)(NU64)((NI64)((NU64)(x) >> (NU64)(shift)))) & ((NI32) 15))];
+		nimln(364, "strutils.nim");
+		nimln(364, "strutils.nim");
+		TMP179 = addInt64(shift, 4);
+		shift = (NI64)(TMP179);
+		nimln(1444, "system.nim");
+		res_90097 = subInt(res_90097, 1);
+	} LA1: ;
+	popFrame();
+	return result;
 }
 N_NOINLINE(void, strutilsInit)(void) {
 	nimfr("strutils", "strutils.nim")
