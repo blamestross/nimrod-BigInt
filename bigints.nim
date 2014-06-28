@@ -174,7 +174,7 @@ proc `shr`*(A:BigInt,i:int) : BigInt =
     val2 = (buffed_d shr j) shl j
     carry = buffed_d - val2
     echo("carry:",carry)
-    result.digits.add( uint32(val shr j))
+    result.digits.add( uint32(val))
 
 
 
