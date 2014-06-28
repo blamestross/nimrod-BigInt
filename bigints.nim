@@ -137,9 +137,9 @@ proc `mod`*(A:BigInt,B:BigInt) : BigInt =
 proc `shl`*(A:BigInt,i:int) : BigInt =
   var j : int = i mod 32
   var C : BigInt = initBigInt()
+  C.neg = A.neg
   var val, carry : int64
   if (i div 32) > 0: #we need to shift multiple sections
-    echo("BIG",i div 32)
     for x in 0..((i div 32) - 1):
       C.digits.add(0)
   for k in 1..A.digits.len:
@@ -147,12 +147,34 @@ proc `shl`*(A:BigInt,i:int) : BigInt =
     val = (cast[int64](d) shl j) + carry
     carry = val shr 32
     C.digits.add(uint32(val))
-    echo(carry,C.digits)
   if carry > 0:
     C.digits.add(uint32(carry))
   echo(carry,C.digits)
 
   result = C
+
+proc `shr`*(A:BigInt,i:int) : BigInt =
+  var C: BigInt = A
+  result = initBigInt()
+  result.neg = A.neg
+  if (i div 32) > 0: #we need to shift multiple sections
+    for x in 0..((i div 32) - 1):
+      if C.digits.len > 1:
+        C.digits = C.digits[1..(C.digits.len-1)]
+      else:
+        C.digits[0]=0
+  #we moved the int-level shifts
+  #now we need to move at the sub-int level
+  var j : int = i mod 32
+  var val, val2, carry : int64 # make variables with some extra space
+  for d in C.digits:
+    val = (int64(d) + carry)
+    val2 = (val shr j) shl j
+    carry = val - val2
+    echo(carry)
+    result.digits.add( uint32(val shr j))
+
+
 
 proc `*`*(A:BigInt,B:BigInt) : BigInt = 
   result = initBigInt(0)
